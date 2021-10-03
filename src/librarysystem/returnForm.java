@@ -1,0 +1,586 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package librarysystem;
+
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
+import org.joda.time.Seconds;
+
+/**
+ *
+ * @author agraw
+ */
+public class returnForm extends javax.swing.JFrame {
+
+    /**
+     * Creates new form returnForm
+     */
+     Connection con;
+    ResultSet rs;
+    PreparedStatement ps;
+    int mediaKept=0;
+    int fine=0;
+    String branch="";
+    
+    
+    protected static String e_id;
+    public returnForm(String e_id) {
+        super("Return Form");
+        con=javaConnection.getConnection();
+        initComponents();
+        this.e_id=e_id;
+        jLabel4.setVisible(false);
+        jButton3.setVisible(false);
+        setBranch();
+      
+    }
+    
+    public void setBranch(){
+        String sql="SELECT Branch FROM `librarian` AS L WHERE `EId`=?";
+          try {
+           // System.out.println("i m here");
+            ps=con.prepareStatement(sql);
+            ps.setString(1,e_id);
+           
+            rs=ps.executeQuery();
+         if(rs.next()){
+             branch=rs.getString(1);
+             jTextField1.setText(branch);
+         }
+            ps.close();
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null,ex);
+        }
+    }
+     public void setCode(){
+         
+            
+        String sql="UPDATE `media` SET `Code`=1, `location`= ? WHERE `MediaId`=?";
+        
+        try {
+           // System.out.println("i m here");
+            ps=con.prepareStatement(sql);
+            ps.setString(1,branch);
+            ps.setString(2,mediaId.getText());
+           
+            
+          
+             // ps.setString(6,Pages.getText());
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Updated");
+           
+            ps.close();
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null,ex);
+        }
+    }
+     public void setFine(){
+         String sql="UPDATE `cards` SET `Fine`="+fine+" WHERE `Card_No`=?";
+     try {
+           // System.out.println("i m here");
+            ps=con.prepareStatement(sql);
+            ps.setString(1,cardNo.getText());
+
+            ps.executeUpdate();
+            
+           
+           
+            ps.close();
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null,ex);
+        }
+     }
+     
+     
+    public void insert(){
+    
+                String query="INSERT INTO `returnstats`(`Card_No`, `MediaId`, `IssueDate`,`ReturnDate`) VALUES (?,?,?,?)";
+        try {
+           // System.out.println("i m here");
+            ps=con.prepareStatement(query);
+            ps.setString(1,cardNo.getText());
+            ps.setString(2,mediaId.getText());
+            ps.setString(3,issueDate.getText());
+            ps.setString(4,returnDate.getText());
+           
+            ps.executeUpdate();
+           
+            ps.close();
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null,"Error Occured While Issuing");
+        }
+    }
+    
+    public void delete(){
+         String query="DELETE FROM `issuestats` WHERE MediaId=?";
+        try {
+           // System.out.println("i m here");
+            ps=con.prepareStatement(query);
+           
+            ps.setString(1,mediaId.getText());
+          
+           
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null,"Book Returned");
+           
+            ps.close();
+            setVisible(false);
+        LibHome ob=new LibHome(e_id);
+        ob.setVisible(true);
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null,"Error Occured While Issuing");
+        }
+            
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        returnDate = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        issueDate = new javax.swing.JTextField();
+        cardNo = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        MediaTitle = new javax.swing.JTextField();
+        mediaId = new javax.swing.JTextField();
+        author = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(28, 26, 33));
+
+        jLabel9.setFont(new java.awt.Font("Lucida Calligraphy", 1, 18)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel9.setText("Return Date :");
+
+        returnDate.setEditable(false);
+        returnDate.setText("YYYY-MM-DD");
+
+        jLabel6.setFont(new java.awt.Font("Lucida Calligraphy", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel6.setText("Issue Date    :");
+
+        issueDate.setEditable(false);
+        issueDate.setText("YYYY-MM-DD");
+
+        cardNo.setEditable(false);
+        cardNo.setText("Extract Card No");
+
+        jLabel8.setFont(new java.awt.Font("Lucida Calligraphy", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel8.setText("Card No       :");
+
+        jButton5.setFont(new java.awt.Font("Kristen ITC", 0, 13)); // NOI18N
+        jButton5.setText("Retrive");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setFont(new java.awt.Font("Kristen ITC", 0, 13)); // NOI18N
+        jButton3.setText("Return");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setFont(new java.awt.Font("Kristen ITC", 0, 12)); // NOI18N
+        jButton4.setText("Go Back");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setFont(new java.awt.Font("Kristen ITC", 0, 13)); // NOI18N
+        jButton1.setText("search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        mediaId.setEditable(false);
+
+        author.setEditable(false);
+        author.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                authorActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Lucida Calligraphy", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel3.setText("Author        :");
+
+        jLabel7.setFont(new java.awt.Font("Lucida Calligraphy", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel7.setText("Media Id     :");
+
+        jLabel2.setFont(new java.awt.Font("Lucida Calligraphy", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel2.setText("Book Id            :");
+
+        jLabel1.setFont(new java.awt.Font("MV Boli", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(238, 235, 235));
+        jLabel1.setText("Return Portal");
+
+        jButton2.setText("Check For fine");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(102, 255, 0));
+        jLabel4.setText("jLabel4");
+
+        jTextField1.setText("jTextField1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(40, 40, 40)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(issueDate, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(author)
+                                                    .addComponent(mediaId, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addComponent(cardNo, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(jButton5))
+                                                    .addComponent(MediaTitle))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jButton1))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(returnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(229, 229, 229)))))
+                        .addContainerGap(77, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(170, 170, 170)
+                        .addComponent(jButton4)
+                        .addGap(60, 60, 60))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(173, 173, 173)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jButton2))
+                        .addGap(295, 295, 295))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(MediaTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(mediaId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(author, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(80, 80, 80)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cardNo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(jButton5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(issueDate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(returnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(35, 35, 35)
+                        .addComponent(jButton3)
+                        .addGap(26, 26, 26))))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void authorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_authorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_authorActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String sql="SELECT B.Author,BM.MediaId ,COUNT(B.Title) FROM books B INNER JOIN `book media` AS BM ON B.BookId = BM.BookId INNER JOIN `media` AS M ON M.MediaId=BM.MediaId WHERE M.Code=2 AND B.BookId=? GROUP BY(Title)";
+
+        try {
+            ps=con.prepareStatement(sql);
+            ps.setString(1,MediaTitle.getText());
+            rs=ps.executeQuery();
+            if(rs.next()){
+                author.setText(rs.getString(1));
+                mediaId.setText(rs.getString(2));
+               
+
+                rs.close();
+                ps.close();
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"Book With this id is not currently issued");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(returnForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String sql="SELECT C.Card_No , C.IssueDate FROM `issuestats` C WHERE C.MediaId=?";
+
+        try {
+            ps=con.prepareStatement(sql);
+            ps.setString(1,mediaId.getText());
+
+            rs=ps.executeQuery();
+            if(rs.next()){
+                cardNo.setText(rs.getString(1));
+                issueDate.setText(rs.getString(2));
+
+                rs.close();
+                ps.close();
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchBook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        //code=2
+        LocalDateTime now = LocalDateTime.now();
+       
+        //s_id insert into issue table
+        setFine();
+        insert();
+        setCode();
+        delete();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        setVisible(false);
+        LibHome ob= new LibHome(e_id);
+        ob.setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formate = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");  
+        String returnOn = now.format(formate); 
+        
+        
+	returnDate.setText(""+returnOn);
+        String issueOn =issueDate.getText() ;
+
+	SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+	Date d1 = null;
+	Date d2 = null;
+
+	try {
+		d1 = format.parse(issueOn);
+		d2 = format.parse(returnOn);
+
+		DateTime dt1 = new DateTime(d1);
+		DateTime dt2 = new DateTime(d2);
+                
+                mediaKept=Days.daysBetween(dt1, dt2).getDays();
+                
+                fine=(mediaKept-7)*5;
+                
+                if(fine<=0){
+                    jLabel4.setText("Returning within time");
+                    jLabel4.setForeground(Color.green);
+                    jLabel4.setVisible(true);
+                    fine=0;
+                }
+                else{
+                    jLabel4.setText("Fine of Rs."+fine+" is to pe paid.");
+                    jLabel4.setForeground(Color.red);
+                }   
+                jButton3.setVisible(true);
+               System.out.println(fine);
+
+//		System.out.print(Days.daysBetween(dt1, dt2).getDays() + " days, ");
+//		System.out.print(Hours.hoursBetween(dt1, dt2).getHours() % 24 + " hours, ");
+//		System.out.print(Minutes.minutesBetween(dt1, dt2).getMinutes() % 60 + " minutes, ");
+//		System.out.print(Seconds.secondsBetween(dt1, dt2).getSeconds() % 60 + " seconds.");
+
+	 } catch (Exception e) {
+		e.printStackTrace();
+	 }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(returnForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(returnForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(returnForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(returnForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new returnForm(e_id).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField MediaTitle;
+    private javax.swing.JTextField author;
+    private javax.swing.JTextField cardNo;
+    private javax.swing.JTextField issueDate;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField mediaId;
+    private javax.swing.JTextField returnDate;
+    // End of variables declaration//GEN-END:variables
+}
